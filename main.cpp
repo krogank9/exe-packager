@@ -5,12 +5,18 @@
 #include <QStringList>
 #include "miniz.h"
 
+#ifdef _WIN32
+    #define TMPDIR "%USERPROFILE%\\\\AppData\\\\Local\\\\"
+    #define SLASH "\\\\"
+#else
+    #define TMPDIR "/tmp/"
+    #define SLASH "/"
+#endif
+
 QByteArray compressQBytes(QByteArray bytes) {
     QByteArray out(compressBound(bytes.size()), 0);
     unsigned long outLen = (unsigned long) out.size();
-    qInfo() << "outLen A:" << outLen;
     compress((unsigned char*)out.data(), &outLen, (unsigned char*)bytes.data(), bytes.size());
-    qInfo() << "outLen B:" << outLen;
     out.resize(outLen);
     return out;
 }
@@ -81,13 +87,13 @@ int main(int argc, char *argv[])
     // Make paths relative to tmp folder
     QString dirName = exeDir.absolutePath();
     for(int i=0; i<fileNames.length(); i++)
-        fileNames[i] = "/tmp/"+exeShortName+"/"+fileNames[i].remove(dirName+"/");
+        fileNames[i] = TMPDIR+exeShortName+SLASH+fileNames[i].remove(dirName+"/").replace("/",SLASH);
     for(int i=0; i<subDirsToMake.length(); i++)
-        subDirsToMake[i] = "/tmp/"+exeShortName+subDirsToMake[i].remove(dirName);
+        subDirsToMake[i] = TMPDIR+exeShortName+subDirsToMake[i].remove(dirName).replace("/",SLASH);
     qInfo() << subDirsToMake;
 
     QString exeLoc = "char *exeName = \""+exeName+"\";";
-    QString baseLoc = "char *baseDir = \"/tmp/"+exeShortName+"/\";";
+    QString baseLoc = ("char *baseDir = \"" TMPDIR)+exeShortName+SLASH+"\";";
     QString dirsNum = "int numDirs = "+QString::number(subDirsToMake.length())+";";
     QString fileCount = "int fileCount = "+QString::number(fileNames.length())+";";
     QString fileSizesC = "int fileSizesCompressed[] = {"+fileSizesCompressed.join(", ")+"};";
