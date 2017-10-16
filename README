@@ -4,4 +4,4 @@ Output is a C file with compressed base 64 strings which are extracted into temp
 
 Only seems to work if you compile the output with the Tiny C Compiler, segfaults when I tried with GCC I assume because the base64 strings are MB's long. submit a PR if you know the solution
 
-public domain
+public domain aside from miniz header
