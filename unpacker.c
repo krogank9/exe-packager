@@ -6,30 +6,13 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
-//Base64 char table - used internally for encoding
-unsigned char b64_chr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
 unsigned int b64_int(unsigned int ch) {
-
-    // ASCII to base64_int
-    // 65-90  Upper Case  >>  0-25
-    // 97-122 Lower Case  >>  26-51
-    // 48-57  Numbers     >>  52-61
-    // 43     Plus (+)    >>  62
-    // 47     Slash (/)   >>  63
-    // 61     Equal (=)   >>  64~
-    if (ch==43)
-    return 62;
-    if (ch==47)
-    return 63;
-    if (ch==61)
-    return 64;
-    if ((ch>47) && (ch<58))
-    return ch + 4;
-    if ((ch>64) && (ch<91))
-    return ch - 'A';
-    if ((ch>96) && (ch<123))
-    return (ch - 'a') + 26;
+    if (ch==43) return 62;
+    if (ch==47) return 63;
+    if (ch==61) return 64;
+    if ((ch>47) && (ch<58)) return ch + 4;
+    if ((ch>64) && (ch<91)) return ch - 'A';
+    if ((ch>96) && (ch<123)) return (ch - 'a') + 26;
     return 0;
 }
 
