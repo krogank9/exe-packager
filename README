@@ -1,5 +1,7 @@
 Utility for packaging executables with their required libraries & resources
 
-Output is a C file with compressed base 64 strings which are extracted into temp folder on first run, then the executable is run from the temp directory
+Output is a C file with compressed base 64 strings which are extracted into temp folder on first run, then the executable is run from the temp directory.
+
+only seems to work with tiny C compiler, segfaults when I tried with GCC I assume because the base64 strings are MB's long. submit a PR if you know the solution
 
 public domain
