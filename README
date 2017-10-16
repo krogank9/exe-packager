@@ -1,0 +1,5 @@
+Utility for packaging executables with their required libraries & resources
+
+Output is a C file with compressed base 64 strings which are extracted into temp folder on first run, then the executable is run from the temp directory
+
+public domain
