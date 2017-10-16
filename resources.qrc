@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>unpacker.c</file>
+        <file>miniz.h</file>
+    </qresource>
+</RCC>
