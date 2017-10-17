@@ -3,6 +3,28 @@
 //  with the files, directories, & file contents in base64
 //  stored in c arrays to be compiled by tiny c compiler
 
+const static char *miniz_license = "Copyright 2013-2014 RAD Game Tools and Valve Software\
+Copyright 2010-2014 Rich Geldreich and Tenacious Software LLC\n\
+All Rights Reserved.\n\
+\n\n\
+Permission is hereby granted, free of charge, to any person obtaining a copy\
+of this software and associated documentation files (the \"Software\"), to deal\
+in the Software without restriction, including without limitation the rights\
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\
+copies of the Software, and to permit persons to whom the Software is\
+furnished to do so, subject to the following conditions:\
+\n\n\
+The above copyright notice and this permission notice shall be included in\
+all copies or substantial portions of the Software.\
+\n\n\
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\
+THE SOFTWARE.\n";
+
 #include <stdio.h>
 #ifdef _WIN32
     #include "windows.h"
@@ -88,13 +110,35 @@ char *str_replace(char *orig, char *rep, char *with) {
     return result;
 }
 
-int main () {
-    for(int i=0; i<numDirs; i++ ) {
-        // todo make platform agnostic
 #ifdef _WIN32
-        char cmd[999];
-        sprintf(cmd, "mkdir %s", dirsToMake[i]);
-        system(cmd);
+    void runCmd(char *cmd) {
+        STARTUPINFOW si;
+        PROCESS_INFORMATION pi;
+
+        ZeroMemory(&si, sizeof(si));
+        si.cb = sizeof(si);
+        ZeroMemory(&pi, sizeof(pi));
+
+        CreateProcess(cmd, "", NULL,NULL,FALSE, CREATE_NEW_CONSOLE, NULL,NULL, &si, &pi);
+    }
+#endif
+
+#ifdef _WIN32
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, nCmdSHow)  {
+#else
+int main () {
+#endif
+
+    printf(miniz_license);
+    for(int i=0; i<numDirs; i++ ) {
+#ifdef _WIN32
+        char *dName = str_replace(dirsToMake[i], "%USERPROFILE%", getenv("USERPROFILE"));
+        if(dName == NULL) {
+            printf("Error getting dir absolute path\n");
+            return 1;
+        }
+        CreateDirectory(dName, NULL);
+        free(dName);
 #else
         mkdir(dirsToMake[i], S_IRWXU);
 #endif
@@ -140,9 +184,12 @@ int main () {
     }
 
 #ifdef _WIN32
-    char win_cmd[9999];
-    sprintf(win_cmd, "cd %s && %s", baseDir, exeName);
-    system(win_cmd);
+    char cmd[9999];
+    sprintf(cmd, "%s%s", baseDir, exeName);
+    char *pName = str_replace(cmd, "%USERPROFILE%", getenv("USERPROFILE"));
+    printf("%s\n", pName);
+    runCmd(pName);
+    free(pName);
 #else
     char linux_perms_cmd[9999];
     asprintf(&linux_perms_cmd, "cd %s && chmod +x %s && ./%s", baseDir, exeName, exeName);

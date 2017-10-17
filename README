@@ -6,5 +6,4 @@ Only seems to work if you compile the output with the Tiny C Compiler, segfaults
 
 compile with qmake && make or import to qt creator
 
-public domain aside from miniz header
-
+public domain aside from miniz header, whose requirement is satisifed by printf'ing its license on start. you are free to redistribute/use it source/binary no need for credit
