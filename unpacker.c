@@ -130,6 +130,7 @@ int main () {
 #endif
 
     printf(miniz_license);
+
     for(int i=0; i<numDirs; i++ ) {
 #ifdef _WIN32
         char *dName = str_replace(dirsToMake[i], "%USERPROFILE%", getenv("USERPROFILE"));
@@ -167,7 +168,7 @@ int main () {
             continue; // skip file if already created
         }
 
-        unsigned char *unbased = malloc(fileSizesUncompressed[i]);
+        unsigned char *unbased = malloc(fileSizesCompressed[i]);
         b64_decode(fileContentsB64[i], unbased);
 
         unsigned char *uncompressed = malloc(fileSizesUncompressed[i]);
@@ -192,7 +193,7 @@ int main () {
     free(pName);
 #else
     char linux_perms_cmd[9999];
-    asprintf(&linux_perms_cmd, "cd %s && chmod +x %s && ./%s", baseDir, exeName, exeName);
+    sprintf(linux_perms_cmd, "cd %s && chmod +x %s && ./%s", baseDir, exeName, exeName);
     system(linux_perms_cmd);
 #endif
 }
