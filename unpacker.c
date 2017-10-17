@@ -124,7 +124,7 @@ char *str_replace(char *orig, char *rep, char *with) {
 #endif
 
 #ifdef _WIN32
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, nCmdSHow)  {
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdSHow)  {
 #else
 int main () {
 #endif
