@@ -63,17 +63,13 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QFileDialog openDialog(0, "Select EXE to pack", "Executable Files (*.exe)");
-    openDialog.show();
-    openDialog.exec();
+    QString exePath = QFileDialog::getOpenFileName(0, "Select EXE to pack");
 
-    // Show prompt to select which exe to pack
-    QStringList files = openDialog.selectedFiles();
-    if(files.length() != 1)
+    if(exePath.length() == 0) {
         return 0;
+    }
 
     // Exe selected, save name & recurse through its directory tree converting to base64.
-    QString exePath = files.at(0);
     QFile exeFile(exePath);
     QFileInfo exeInfo(exeFile);
     QString exeName = exeInfo.fileName();
