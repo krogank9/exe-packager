@@ -6,7 +6,7 @@
 #include "miniz.h"
 
 #ifdef _WIN32
-    #define TMPDIR "%USERPROFILE%\\\\AppData\\\\Local\\\\"
+    #define TMPDIR "%USERPROFILE%\\\\AppData\\\\Local\\\\Temp\\\\"
     #define SLASH "\\\\"
 #else
     #define TMPDIR "/tmp/"
